@@ -38,8 +38,7 @@ class ParticleAnalyzer:
         dist_transform = cv2.distanceTransform(binary, cv2.DIST_L2, 5)
         
         # Threshold distance transform to get seeds
-        # Lower threshold = more seeds = better separation of touching particles
-        _, sur_mask = cv2.threshold(dist_transform, 0.2 * dist_transform.max(), 255, 0)
+        _, sur_mask = cv2.threshold(dist_transform, 0.4 * dist_transform.max(), 255, 0)
         sur_mask = np.uint8(sur_mask)
         
         # Find unknown region
@@ -68,10 +67,8 @@ class ParticleAnalyzer:
         props = measure.regionprops(labels)
         data = []
         
-        MIN_AREA = 150  # Ignore tiny noise blobs (pixels). Tune this value if needed.
-        
         total_area = np.sum(binary > 0)
-        props = [p for p in props if p.area >= MIN_AREA]  # Filter out noise
+        mean_area = np.mean([p.area for p in props]) if props else 0
         num_particles = len(props)
         
         for p in props:
