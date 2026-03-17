@@ -1,0 +1,8 @@
+opencv-python
+scikit-image
+pandas
+matplotlib
+seaborn
+jupyter
+numpy
+streamlit
